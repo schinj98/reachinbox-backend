@@ -12,7 +12,14 @@ const app = express();
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: "http://localhost:5173", // frontend URL or Vercel domain
+    origin: function (origin, callback) {
+      const allowedOrigins = ["http://localhost:5173", "https://reachinbox-lovat.vercel.app"];
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
     methods: ["GET", "POST"]
   }
 });
