@@ -15,9 +15,17 @@ const app = (0, express_1.default)();
 const server = http_1.default.createServer(app);
 const io = new socket_io_1.Server(server, {
     cors: {
-        origin: ["http://localhost:5173", "https://reachinbox-lovat.vercel.app"],
+        origin: function (origin, callback) {
+          const allowedOrigins = ["http://localhost:5173", "https://reachinbox-lovat.vercel.app"];
+          if (!origin || allowedOrigins.includes(origin)) {
+            callback(null, true);
+          } else {
+            callback(new Error("Not allowed by CORS"));
+          }
+        },
         methods: ["GET", "POST"]
     }
+      
 });
 app.use((0, cors_1.default)());
 app.use(express_1.default.json());
